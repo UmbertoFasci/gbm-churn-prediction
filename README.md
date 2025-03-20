@@ -1,5 +1,5 @@
 # Introduction
-Procedure outlining the prediction of customer churn as a binary target. Models such as Random Forest Classifier, LightGBM, XGBoost, and CatBoost are tuned and trained on the dataset in order to build an optimal customer churn prediction model. Included in this documentation is an exploratory data analysis which takes an in depth look at the various features across the various datasets.
+Procedure outlining the prediction of customer churn as a binary target. Models such as **Random Forest Classifier**, **LightGBM**, **XGBoost**, and **CatBoost** are tuned and trained on the dataset in order to build an optimal customer churn prediction model. Included in this documentation is an exploratory data analysis which takes an in depth look at the various features across the various datasets.
 
 ## Prompt
 A telecom operator would like to be able to forecast their churn of clients. If it's discovered that a user is planning to leave, they will be offered promotional codes and special plan options. Their marketing team has collected some of their clientele's personal data, including information about their plans and contracts.
