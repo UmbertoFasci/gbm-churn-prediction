@@ -107,4 +107,23 @@ def preprocess_internet_data(df):
 
 `TotalInternet` services represents the sum total of internet services opted-in for per customer across 6 different services. This distribution suggests a relatively uniform distribution favoring more opt-ins.
 
+## Personal
+
+Similar to the `internet` dataset, the `personal` presents a catalog of a customer's personal info presented in a categorical nature. Utilizing this kind of data, we must ensure it is applied in an ethical manner, and adhere to the telecom operator's risk management policies. Assuming the use of the data and the utilization of the data to determine customer targeting based on `gender`, `SeniorCitizen` status, `Partner` status, and `Dependents` status is completely allowed.
+
+```python
+def preprocess_personal_data(df):
+    df = df.copy()
+    
+    # Convert Yes/No columns to binary
+    binary_columns = ['Partner', 'Dependents']
+    for col in binary_columns:
+        df[col] = df[col].map({'Yes': 1, 'No': 0})
+    
+    # Convert gender
+    df['gender'] = pd.Categorical(df['gender'])
+    
+    return df
+```
+
 
