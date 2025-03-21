@@ -131,3 +131,52 @@ No new features can be inferred based on the provided personal data. `FamilySize
 
 No data processing for the phone dataset is needed at this point of the procedure.
 
+## Feature Matrix
+
+Merging all the previously processed datasets will allow for further analysis. It is important to note that since the datasets are not the same size there will be missing values introduced during the merge, and handling them appropriately is essential.
+
+```python
+def create_feature_matrix(contract_df, internet_df, personal_df, phone_df):
+    # Initialize feature matrix with contract data
+    feature_matrix = contract_df.copy()
+
+    # Add service enrollment indicators before merging
+    all_customers = feature_matrix['customerID']
+
+    # Internet service enrollment
+    feature_matrix['HasInternetService'] = feature_matrix['customerID'].isin(internet_df['customerID'])
+
+    # Phone service enrollment
+    feature_matrix['HasPhoneService'] = feature_matrix['customerID'].isin(phone_df['customerID'])
+    
+    # Add internet services
+    feature_matrix = feature_matrix.merge(
+        internet_df,
+        on='customerID',
+        how='left'
+    )
+    # Handle NA values for customers without internet service
+    internet_columns = internet_df.columns.drop('customerID')
+    
+    # Add phone services
+    feature_matrix = feature_matrix.merge(
+        phone_df,
+        on='customerID',
+        how='left'
+    )
+    # Fill NA values for customers without phone service
+    feature_matrix['MultipleLines'] = feature_matrix['MultipleLines'].fillna('No Service')
+    
+    # Add personal information
+    feature_matrix = feature_matrix.merge(
+        personal_df,
+        on='customerID',
+        how='left'
+    )
+    
+    return feature_matrix
+
+feature_matrix = create_feature_matrix(contract_df, internet_df, personal_df, phone_df)
+```
+
+In the case of handling the introduced missing values, the only two features that would be an effect of these artifacts are `internet` and `phone`. Another important aspect of this to note is that in order to be included in this dataset in the first place is to be a part of either of these two particular datasets as a subscriber to the appropriate plan. In this case, most customers were subscribed to an internet plan so the missing values in this case can be confidently dropped. The phone plans represent a different story all together, the amount of customers that do not opt in for the phone services is significant enough to justify imputation.
