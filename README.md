@@ -73,4 +73,5 @@ def preprocess_contract_data(df):
     return df
 ```
 
+![Contract Duration Distribution](https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/ctr_duration.png)
 
