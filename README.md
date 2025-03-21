@@ -37,7 +37,7 @@ After loading the data and performing a baseline assessment, the `contract` and 
 
 Throughout the entire corpus of data, `customerID` represents the unique customer identifier in order to better link the entire customer profile.
 
-## Contract Data
+## Contract
 
 As an initial handling of the data, `contract_df` only requires a handling of the datetime types, and feature engineering in the form of creating the `ContractDuration`. This can be done under the assumption that the data was collected on **Feburary 1, 2020**. With this constant, we can calculate the contract duration of non-churned customers.
 
@@ -71,6 +71,40 @@ def preprocess_contract_data(df):
     return df
 ```
 
-![Contract Duration Distribution](https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/ctr_duration.png)
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/ctr_duration.png" alt="contract duration distribution" style="width:100%;"/>
 
 The calculated feature, `ContractDuration`, expresses a distribution where customers have a contract duration between 1 and 73 months, with a large concentration of customers having signed a contract within the previous 10 months of the dataset generation. The largest group of customers can be presented as having a contract duration between 10 and 63 months (this can be further delineated), with a small group of customers having an active contract duration exceeding 63 months.
+
+## Internet
+
+The `internet` dataset is a simple catalog of the opted for (or not) internet services provided by the telecom operator. There is no need for any data preprocessing besides the generation of several new features through feature engineering.
+
+```python
+def preprocess_internet_data(df):
+    # Map all Yes/No service indicators to 1/0
+    service_columns = [
+        'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+        'TechSupport', 'StreamingTV', 'StreamingMovies'
+    ]
+    
+    for col in service_columns:
+        df[col] = df[col].map({
+            'Yes': 1,
+            'No': 0,
+            'No internet service': 0
+        })
+    
+    # Create a count of total services
+    df['TotalInternetServices'] = df[service_columns].sum(axis=1)
+    
+    # Convert InternetService to categorical codes
+    df['InternetService'] = pd.Categorical(df['InternetService'])
+    
+    return df
+```
+
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/int_service_dis.png" alt="internet service distribution" style="width:100%;"/>
+
+`TotalInternet` services represents the sum total of internet services opted-in for per customer across 6 different services. This distribution suggests a relatively uniform distribution favoring more opt-ins.
+
+
