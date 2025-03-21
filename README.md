@@ -127,5 +127,7 @@ def preprocess_personal_data(df):
 ```
 No new features can be inferred based on the provided personal data. `FamilySize` might be a potential feature worth looking into however the information necessary to calculate that is not available. In this case, generating binary maps for the several features included will suffice.
 
+## Phone
 
+No data processing for the phone dataset is needed at this point of the procedure.
 
