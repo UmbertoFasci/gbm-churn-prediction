@@ -37,11 +37,9 @@ After loading the data and performing a baseline assessment, the `contract` and 
 
 Throughout the entire corpus of data, `customerID` represents the unique customer identifier in order to better link the entire customer profile.
 
-## Data Processing
+## Contract Data
 
 As an initial handling of the data, `contract_df` only requires a handling of the datetime types, and feature engineering in the form of creating the `ContractDuration`. This can be done under the assumption that the data was collected on **Feburary 1, 2020**. With this constant, we can calculate the contract duration of non-churned customers.
-
-### Contract Data
 
 ```python
 date_collected = date(2020, 2, 1)
@@ -75,3 +73,4 @@ def preprocess_contract_data(df):
 
 ![Contract Duration Distribution](https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/ctr_duration.png)
 
+The calculated feature, `ContractDuration`, expresses a distribution where customers have a contract duration between 1 and 73 months, with a large concentration of customers having signed a contract within the previous 10 months of the dataset generation. The largest group of customers can be presented as having a contract duration between 10 and 63 months (this can be further delineated), with a small group of customers having an active contract duration exceeding 63 months.
