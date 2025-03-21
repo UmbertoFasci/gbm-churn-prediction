@@ -1,6 +1,7 @@
+# Optimized Customer Churn Prediction with Gradient Boosting and Optuna Hyperparameter Tuning
+
 <img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/customer_churn.png" alt="customer churn hero" style="width:100%;"/>
 
-# Introduction
 Procedure outlining the prediction of customer churn as a binary target. Models such as **Random Forest Classifier**, **LightGBM**, **XGBoost**, and **CatBoost** are tuned and trained on the dataset in order to build an optimal customer churn prediction model. Included in this documentation is an exploratory data analysis which takes an in depth look at the various features across the various datasets.
 
 ## Prompt
