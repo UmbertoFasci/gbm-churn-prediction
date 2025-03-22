@@ -184,10 +184,12 @@ def create_feature_matrix(contract_df, internet_df, personal_df, phone_df):
 feature_matrix = create_feature_matrix(contract_df, internet_df, personal_df, phone_df)
 ```
 
-In the case of handling the introduced missing values, the only two features that would be an effect of these artifacts are `internet` and `phone`. Another important aspect of this to note is that in order to be included in this dataset in the first place is to be a part of either of these two particular datasets as a subscriber to the appropriate plan. In this case, most customers were subscribed to an internet plan so the missing values in this case can be confidently dropped. The phone plans represent a different story all together, the amount of customers that do not opt in for the phone services is significant enough to justify imputation.
+In the case of handling the introduced missing values, the only two features that would be an effect of these artifacts are `internet` and `phone`. Another important aspect of this to note is that in order to be included in this dataset in the first place is to be a part of either of these two particular datasets as a subscriber to the appropriate plan.
 
 With the feature matrix created, we can perform a more in depth analysis.
 
-## Service Enrollment
+## Service Enrollment Analysis
 
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_enrollment.png" alt="service enrollment" style="width:100%;"/>
 
+Taking a look at the whole dataset, there are more customers enrolled in the `phone` plans, and more customers not opting in to the `internet` plan. To clarify, both plans are of a healthy ratio of opted-in customers. Where are the opted-out customers going? Since they are part of our dataset they must be enrolled in one of these two plans, so the 1520 not enrolled in an internet plan must only be enrolled in a phone plan, and vice-versa.
