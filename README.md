@@ -40,6 +40,8 @@ After loading the data and performing a baseline assessment, the `contract` and 
 
 Throughout the entire corpus of data, `customerID` represents the unique customer identifier in order to better link the entire customer profile.
 
+The data processing which occurs in this section is solely for the purpose of completing the analysis and for initializing the modeling data. The data will be further processed for the modeling procedure in the following section.
+
 ## Contract
 
 As an initial handling of the data, `contract_df` only requires a handling of the datetime types, and feature engineering in the form of creating the `ContractDuration`. This can be done under the assumption that the data was collected on **Feburary 1, 2020**. With this constant, we can calculate the contract duration of non-churned customers.
@@ -183,3 +185,9 @@ feature_matrix = create_feature_matrix(contract_df, internet_df, personal_df, ph
 ```
 
 In the case of handling the introduced missing values, the only two features that would be an effect of these artifacts are `internet` and `phone`. Another important aspect of this to note is that in order to be included in this dataset in the first place is to be a part of either of these two particular datasets as a subscriber to the appropriate plan. In this case, most customers were subscribed to an internet plan so the missing values in this case can be confidently dropped. The phone plans represent a different story all together, the amount of customers that do not opt in for the phone services is significant enough to justify imputation.
+
+With the feature matrix created, we can perform a more in depth analysis.
+
+## Service Enrollment
+
+
