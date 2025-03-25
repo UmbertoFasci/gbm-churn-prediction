@@ -201,3 +201,7 @@ Taking a look at the whole dataset, there are more customers enrolled in the `ph
 This reinforces what we determined earlier, the 1520 customers who have opted-out of the internet plan were enrolled in a **phone-only** service, and those who have opted out of the phone plan were enrolled in a **internet-only** service. There are no customer entries which are enrolled in `No Service`.
 
 Most customers opt-in for the combination plan with internet and phone services, suggesting good converting practices targeting this particular plan.
+
+### Contract Type by Service Group
+
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_grp_chr.png" alt="service enrollment combination by contract" style="width:100%;"/>
