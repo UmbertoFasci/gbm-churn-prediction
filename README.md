@@ -193,3 +193,11 @@ With the feature matrix created, we can perform a more in depth analysis.
 <img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_enrollment.png" alt="service enrollment" style="width:100%;"/>
 
 Taking a look at the whole dataset, there are more customers enrolled in the `phone` plans, and more customers not opting in to the `internet` plan. To clarify, both plans are of a healthy ratio of opted-in customers. Where are the opted-out customers going? Since they are part of our dataset they must be enrolled in one of these two plans, so the 1520 not enrolled in an internet plan must only be enrolled in a phone plan, and vice-versa.
+
+### Opt-in Pattern
+
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_enrollment_comb.png" alt="service enrollment combination" style="width:100%;"/>
+
+This reinforces what we determined earlier, the 1520 customers who have opted-out of the internet plan were enrolled in a **phone-only** service, and those who have opted out of the phone plan were enrolled in a **internet-only** service. There are no customer entries which are enrolled in `No Service`.
+
+Most customers opt-in for the combination plan with internet and phone services, suggesting good converting practices targeting this particular plan.
