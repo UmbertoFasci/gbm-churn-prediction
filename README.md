@@ -361,3 +361,30 @@ for name, model in models.items():
         'accuracy': accuracy
     }
 ```
+<img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/model_performance.png" alt="model performance" style="width:100%;"/>
+
+# Model Training Conclusion
+
+On the whole, the training procedure resulted in good performances throughout, with **LightGBM** performing the best in terms of the _ROC-AUC_ and _Accuracy_ metric. Considering the overall performance of the modeling procedure, future steps should consider leveraging an ensemble approach with tools like `VotingClassifer` and obtain a weighted prediction. This would provide a more robust prediction.
+
+For these purposes, **LightGBM** and its' model trained on the customer churn data is an appropriate choice to further explore its role in Interconnect's efforts to reduce customer churn. On a final note, **XGBoost** and **CatBoost** should also be considered in the event they are more appropriate for a production environment. **XGBoost** for example, is widely utilized in production, so this constitutes a reasononing to consider all three for the production model.
+
+- The key steps for solving the task of churn prediction are as follows:
+  
+  1. Data Preparation
+     - data type setting, to ensure that date time or numerical calculations can be performed correctly, and categorical features can be encoded properly.
+     - feature engineering, to calculate features to better inform upon the present churn rate, like `ContractDuration`. 
+  2. Data Processing for Modeling
+     - encode categorical features in order to format the features for machine learning. Some models like CatBoost can handle categorical features natively, so encoding is not necessary, but the same processed dataset is utilized throughout all the models.
+     - scale numerical features to impose a fair field where all numerical features are on the same scale, and importance won't be influenced by numerical size of one feature over an other.
+     - here class imbalance can be directly handled. However, class imbalance is handled through the modeling procedure where weight adjustments are automatically undetaken so that importance is appropriately distributed without being influenced by a majority class.
+  3. Model Hypertuning
+     - utilizing the **Optuna hyperaparameter optimization framework**, the trial-based system was leveraged to suggest all parameter values for each model based on defined numerical ranges or listed options.
+     - each model was trained on 100 trials, and the most optimal parameter values were discovered for each model.
+  4. Model Procedure
+     -  utilizing the optimal parameters, **LightGBM**, **XGBoost**, **CatBoost**, and **Random Forest** classifiers were trained and made to predict the churn classification of the data.
+     -  calculating the model performance with **AUC-ROC** and **Accuracy** allowed the models to be ranked by performance where the top performers were identified.
+   
+- The top performing model in Interconnect's churn prediction based on the above procedure was found to be **LightGBM** in combination with optimized parameters. The calculated **AUC-ROC** value was `0.9067`, and the **accuracy score** was additionally calculated at `0.8308`.
+- As mentioned before, considering the differences between the top three performing models, in terms of the quality scores calculated, one might consider an ensemble approach, obtaining a weighted prediction utilizing all three.
+
