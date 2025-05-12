@@ -286,3 +286,78 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 scale_pos_weight = np.sum(y_train == 0) / np.sum(y_train == 1)
 ```
 
+# Model Tuning
+
+In a GPU environment, all models were tuned with the **Optuna** library.
+
+In addition to these paramter ranges, the `class_weight` parameter was utilized in order to handle the class imbalance of customers who have and have not churned.
+
+**LightGBM** utilized a `balanced` class weight which automatically adjusts weights inversely proportional to the class frequencies, giving balanced importance to the minority class. **Random Forest** handles the class imbalances in the same way. **XGBoost** handles the class imbalance by the set ratio between the classes with the previously calculated `sclae_pos_weight` parameter. In a similar manner **CatBoost** implements the same ratio, however requires a list were index 0 represents the base class, and index 1 corresponds to the positive class.
+
+# Modeling
+
+```python
+# Initialize models with pre-tuned parameters
+models = {
+    'LightGBM': LGBMClassifier(
+        n_estimators=869,
+        learning_rate=0.068647,
+        num_leaves=67,
+        max_depth=4,
+        min_child_samples=38,
+        subsample=0.697040,
+        colsample_bytree=0.948016,
+        class_weight='balanced',
+        random_state=42
+    ),
+    'XGBoost': XGBClassifier(
+        n_estimators=525,
+        learning_rate=0.090247,
+        max_depth=4,
+        min_child_weight=2,
+        subsample=0.880375,
+        colsample_bytree=0.906231,
+        scale_pos_weight=scale_pos_weight,
+        random_state=42
+    ),
+    'CatBoost': CatBoostClassifier(
+        iterations=902,
+        learning_rate=0.099470,
+        depth=3,
+        l2_leaf_reg=0.001837,
+        bootstrap_type='Bernoulli',
+        class_weights=[1, scale_pos_weight],
+        random_seed=42,
+        verbose=False
+    ),
+    'Random Forest': RandomForestClassifier(
+        n_estimators=106,
+        max_depth=20,
+        min_samples_split=17,
+        min_samples_leaf=1,
+        class_weight='balanced',
+        random_state=42
+    )
+}
+```
+
+```python
+results = {}
+
+for name, model in models.items():
+    print(f"\nTraining {name}...")
+    model.fit(X_train, y_train)
+    
+    # Make predictions
+    y_pred_proba = model.predict_proba(X_test)[:, 1]
+    y_pred = model.predict(X_test)
+    
+    # Calculate metrics
+    roc_auc = roc_auc_score(y_test, y_pred_proba)
+    accuracy = accuracy_score(y_test, y_pred)
+    
+    results[name] = {
+        'roc_auc': roc_auc,
+        'accuracy': accuracy
+    }
+```
