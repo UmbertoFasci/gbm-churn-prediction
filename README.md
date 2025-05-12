@@ -206,4 +206,83 @@ Most customers opt-in for the combination plan with internet and phone services,
 
 <img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_grp_chr.png" alt="service enrollment combination by contract" style="width:100%;"/>
 
-Having a better understanding of the service group characteristics as it applies to contract length adoption allows us to imply a granular look at the potential relationships between the adoption length and service group selection. Across the board, the most common service group is `internet + phone` as presented in the previous analysis. The most common contract type in this service group is a `month-to-month` type which in most cases represents a default for contract selection for most subscribable services. The main outlier group in this case is the `phone only` service group with having the longest term contracts representing the majority of its base. 
+Having a better understanding of the service group characteristics as it applies to contract length adoption allows us to imply a granular look at the potential relationships between the adoption length and service group selection. Across the board, the most common service group is `internet + phone` as presented in the previous analysis. The most common contract type in this service group is a `month-to-month` type which in most cases represents a default for contract selection for most subscribable services. The main outlier group in this case is the `phone only` service group with having the longest term contracts representing the majority of its base.
+
+# Feature Processing
+
+By defining each column into their respective feature type we can readily apply processing functions so that the data can be better utilized in the context of gradient boosting.
+
+```python
+# Define features
+categorical_features = [
+    'Type', 'PaperlessBilling', 'PaymentMethod',
+    'InternetService', 'MultipleLines'
+]
+numerical_features = [
+    'MonthlyCharges', 'TotalCharges', 'ContractDuration',
+    'TotalInternetServices'
+]
+binary_features = [
+    'HasInternetService', 'HasPhoneService', 
+    'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+    'TechSupport', 'StreamingTV', 'StreamingMovies',
+    'Partner', 'Dependents', 'SeniorCitizen'
+]
+```
+Here, all previously defined categorical features are processed accordingly to ensure that all values are of an expected cateogircal or string type and then encoded into specified numerical identifiers with the `LabelEncoder()`. This method is not scalabale to the extent of streaming or a large amount of categorical values, but works well in this application.
+
+```python
+# Preprocess the data
+df = feature_matrix.copy()
+label_encoders = {}
+scaler = StandardScaler()
+
+# Handle categorical features
+for feature in categorical_features:
+    if df[feature].dtype.name == 'category':
+        categories = df[feature].cat.categories.tolist()
+        df[feature] = df[feature].astype(str)
+    else:
+        df[feature] = df[feature].astype(str)
+        categories = df[feature].unique().tolist()
+    
+    label_encoders[feature] = LabelEncoder()
+    label_encoders[feature].fit(categories)
+    df[feature] = df[feature].map(
+        dict(zip(categories, label_encoders[feature].transform(categories)))
+    )
+```
+
+The numerical features are handled by first imputing the median of each feature set to its missing values, and then scaling the values appropriatly utilizing the `StandardScalar()`. Defined binary features are handled by appropriatly typing them as boolean values, and the missing values in this case are considered to be negative. 
+
+```python
+# Handle numerical features
+for feature in numerical_features:
+    median_value = df[feature].median()
+    df[feature] = df[feature].fillna(median_value)
+
+df[numerical_features] = scaler.fit_transform(df[numerical_features])
+
+# Handle binary features
+for feature in binary_features:
+    if df[feature].dtype == bool:
+        df[feature] = df[feature].astype(int)
+    else:
+        df[feature] = df[feature].fillna(0).astype(int)
+```
+
+Here the features and target variables are generated accordingly after all processing is completed, and the data is split with the specifications of 80-20 train-test split. `scale_pos_weight` is calculated to obtain a class ratio for model balancing during training for select models.
+
+```python
+# Prepare features and target
+features = categorical_features + numerical_features + binary_features
+X = df[features]
+y = df['Churned'].astype(int)
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Calculate class weight for imbalanced data
+scale_pos_weight = np.sum(y_train == 0) / np.sum(y_train == 1)
+```
+
