@@ -205,3 +205,5 @@ Most customers opt-in for the combination plan with internet and phone services,
 ### Contract Type by Service Group
 
 <img src="https://github.com/UmbertoFasci/gbm-churn-prediction/blob/main/assets/svc_grp_chr.png" alt="service enrollment combination by contract" style="width:100%;"/>
+
+Having a better understanding of the service group characteristics as it applies to contract length adoption allows us to imply a granular look at the potential relationships between the adoption length and service group selection. Across the board, the most common service group is `internet + phone` as presented in the previous analysis. The most common contract type in this service group is a `month-to-month` type which in most cases represents a default for contract selection for most subscribable services. The main outlier group in this case is the `phone only` service group with having the longest term contracts representing the majority of its base. 
